@@ -335,18 +335,14 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
           const citationRegex = /\[([^\]]+)\]/g;
           const regex = /\[(\d+)\]/g;
 
-          if (processedText.includes('<think>')) {
-            const openThinkTag = processedText.match(/<think>/g)?.length || 0;
-            const closeThinkTag =
-              processedText.match(/<\/think>/g)?.length || 0;
-
-            if (openThinkTag && !closeThinkTag) {
-              processedText += '</think> <a> </a>';
-            }
-          }
-
-          if (block.data.includes('</think>')) {
+          const closeThinkTag = '</think>';
+          if (block.data.includes(closeThinkTag)) {
             thinkingEnded = true;
+            
+            const closeThinkTagStart = block.data.indexOf(closeThinkTag);
+            const newTextStart = closeThinkTagStart + closeThinkTag.length;
+
+            processedText = processedText.slice(newTextStart, block.data.length);
           }
 
           if (sources.length > 0) {

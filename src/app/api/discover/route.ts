@@ -7,21 +7,15 @@ const websitesForTopic = {
   },
   finance: {
     query: ['finance news', 'economy', 'stock market', 'investing'],
-    links: ['bloomberg.com', 'cnbc.com', 'marketwatch.com'],
+    links: ['bloomberg.com', 'cnbc.com', 'marketwatch.com', 'economist.com'],
   },
-  art: {
-    query: ['art news', 'culture', 'modern art', 'cultural events'],
-    links: ['artnews.com', 'hyperallergic.com', 'theartnewspaper.com'],
-  },
-  sports: {
-    query: ['sports news', 'latest sports', 'cricket football tennis'],
-    links: ['espn.com', 'bbc.com/sport', 'skysports.com'],
-  },
-  entertainment: {
-    query: ['entertainment news', 'movies', 'TV shows', 'celebrities'],
-    links: ['hollywoodreporter.com', 'variety.com', 'deadline.com'],
-  },
-};
+  ai: {
+    query: ['AI news', 'latest AI papers', 'AI', 'latest AI startups'],
+    links: ['quantamagazine.org', 'reuters.com', 'techcrunch.com', 'marketwatch.com'],
+  }
+}
+
+const engines = ['bing news'];
 
 type Topic = keyof typeof websitesForTopic;
 
@@ -46,7 +40,7 @@ export const GET = async (req: Request) => {
             selectedTopic.query.map(async (query) => {
               return (
                 await searchSearxng(`site:${link} ${query}`, {
-                  engines: ['bing news'],
+                  engines: engines,
                   pageno: 1,
                   language: 'en',
                 })
@@ -68,7 +62,7 @@ export const GET = async (req: Request) => {
         await searchSearxng(
           `site:${selectedTopic.links[Math.floor(Math.random() * selectedTopic.links.length)]} ${selectedTopic.query[Math.floor(Math.random() * selectedTopic.query.length)]}`,
           {
-            engines: ['bing news'],
+            engines: engines,
             pageno: 1,
             language: 'en',
           },

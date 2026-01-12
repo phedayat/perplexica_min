@@ -46,6 +46,7 @@ type ChatContext = {
   chatModelProvider: ChatModelProvider;
   embeddingModelProvider: EmbeddingModelProvider;
   researchEnded: boolean;
+  showReasoning: boolean;
   setResearchEnded: (ended: boolean) => void;
   setOptimizationMode: (mode: string) => void;
   setSources: (sources: string[]) => void;
@@ -59,6 +60,7 @@ type ChatContext = {
   rewrite: (messageId: string) => void;
   setChatModelProvider: (provider: ChatModelProvider) => void;
   setEmbeddingModelProvider: (provider: EmbeddingModelProvider) => void;
+  setShowReasoning: (target: boolean) => void;
 };
 
 export interface File {
@@ -256,6 +258,7 @@ export const chatContext = createContext<ChatContext>({
   chatModelProvider: { key: '', providerId: '' },
   embeddingModelProvider: { key: '', providerId: '' },
   researchEnded: false,
+  showReasoning: true,
   rewrite: () => {},
   sendMessage: async () => {},
   setFileIds: () => {},
@@ -265,6 +268,7 @@ export const chatContext = createContext<ChatContext>({
   setChatModelProvider: () => {},
   setEmbeddingModelProvider: () => {},
   setResearchEnded: () => {},
+  setShowReasoning: () => {},
 });
 
 export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
@@ -280,6 +284,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
   const [messageAppeared, setMessageAppeared] = useState(false);
 
   const [researchEnded, setResearchEnded] = useState(false);
+
+  const [showReasoning, setShowReasoning] = useState(true);
 
   const chatHistory = useRef<[string, string][]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -341,8 +347,12 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
             
             const closeThinkTagStart = block.data.indexOf(closeThinkTag);
             const newTextStart = closeThinkTagStart + closeThinkTag.length;
+            // const reasoningBlock = block.data.slice(0, newTextStart);
+            const responseBlock = block.data.slice(newTextStart, block.data.length);
 
-            processedText = processedText.slice(newTextStart, block.data.length);
+            if (!showReasoning) {
+              processedText = responseBlock;
+            }
           }
 
           if (sources.length > 0) {
@@ -396,7 +406,7 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         widgets: widgetBlocks,
       };
     });
-  }, [messages]);
+  }, [messages, showReasoning]);
 
   const isReconnectingRef = useRef(false);
   const handledMessageEndRef = useRef<Set<string>>(new Set());
@@ -830,6 +840,8 @@ export const ChatProvider = ({ children }: { children: React.ReactNode }) => {
         setEmbeddingModelProvider,
         researchEnded,
         setResearchEnded,
+        showReasoning,
+        setShowReasoning,
       }}
     >
       {children}

@@ -282,7 +282,7 @@ const MessageBox = ({
               query={section.message.query}
               messageId={section.message.messageId}
             />
-            <label>
+            <label className="flex items-center gap-2">
               <input type="checkbox" checked={showReasoning} onChange={(e) => setShowReasoning(e.target.checked)}/>
               Show Reasoning
             </label>

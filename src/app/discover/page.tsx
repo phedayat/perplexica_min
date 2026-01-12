@@ -24,16 +24,8 @@ const topics: { key: string; display: string }[] = [
     key: 'finance',
   },
   {
-    display: 'Art & Culture',
-    key: 'art',
-  },
-  {
-    display: 'Sports',
-    key: 'sports',
-  },
-  {
-    display: 'Entertainment',
-    key: 'entertainment',
+    display: 'AI',
+    key: 'ai',
   },
 ];
 

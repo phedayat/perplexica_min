@@ -57,6 +57,8 @@ const MessageBox = ({
     messages,
     researchEnded,
     chatHistory,
+    showReasoning,
+    setShowReasoning
   } = useChat();
 
   const parsedMessage = section.parsedTextBlocks.join('\n\n');
@@ -280,6 +282,10 @@ const MessageBox = ({
               query={section.message.query}
               messageId={section.message.messageId}
             />
+            <label>
+              <input type="checkbox" checked={showReasoning} onChange={(e) => setShowReasoning(e.target.checked)}/>
+              Show Reasoning
+            </label>
           </div>
         )}
       </div>
